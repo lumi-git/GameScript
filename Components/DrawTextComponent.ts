@@ -1,5 +1,4 @@
 import type p5 from "p5";
-import { Component } from "../Component";
 import type { GameObject } from "../GameObject";
 import { drawComponent } from "../drawComponent";
 import type { Camera } from "../Camera";
