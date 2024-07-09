@@ -1,11 +1,7 @@
-import { gameRequestFactory } from "$lib/gameRequestFactory";
 import type p5 from "p5";
 import { Camera } from "./Camera";
 import { Game } from "./Game";
 import { GameObject } from "./GameObject";
-import { fruit } from "$lib/implementedGames/fruit";
-import type { Class } from "estree";
-import { TypeRegistry } from "./TypeRegistry";
 
 export abstract class Scene {
 
@@ -18,7 +14,6 @@ export abstract class Scene {
 
     objectsByTag:Map<string, GameObject[]>;
 
-    typeRegistry = new TypeRegistry();
 
     game?:Game;
 
@@ -76,68 +71,6 @@ export abstract class Scene {
         obj.getTransform().getPosition().setY(y);
     }
 
-    asyncAddObject(obj: GameObject){
-        var request = gameRequestFactory.getSpawnRequest();
-        request.addMetadata("objectData", obj.toSerialized());
-        this.sendToGame(request);
-    }
-
-    asyncRemoveObject(obj: GameObject){
-        var request = gameRequestFactory.getDestroyRequest();
-        request.addMetadata("objectData", obj.toSerialized());
-        this.sendToGame(request);
-    }
-
-    asyncMoveObject(obj: GameObject, x: number, y: number){
-        var oldx = obj.getTransform().getPosition().getX();
-        var oldy = obj.getTransform().getPosition().getY();
-        obj.getTransform().getPosition().setX(x);
-        obj.getTransform().getPosition().setY(y);
-        obj.setFutureTransform(obj.getTransform().copy());
-        var request = gameRequestFactory.getUpdateRequest();
-        request.addMetadata("objectData", obj.toSerialized());
-        this.sendToGame(request);
-    }
-
-    UpdateState(serverState: any) {
-        console.log("updating state");
-        const serverIds = new Set<number>();
-    
-        // Iterate over server state to update and add new objects
-        for (const key in serverState) {
-            if (serverState.hasOwnProperty(key)) {
-                const obj = serverState[key];
-                const type = obj.Type;
-                const cls: any = this.getTypeRegistry().getTypeClass(type);
-                if (cls) {
-                    
-                    if (this.gameObjects.has(obj.id)) {
-                        console.log("updating from request");
-
-                        this.gameObjects.get(obj.id)?.updateFromRequest(obj);
-                    } else {
-                        const gameObject = cls.fromSerialized(obj);
-                        this.addObject(gameObject);
-                    }
-                    serverIds.add(obj.id);
-                }
-            }
-        }
-        //const localObjectIds = new Set<number>(this.gameObjects.keys());
-        //const objectsToRemove = Array.from(localObjectIds).filter(id => !serverIds.has(id) && id > 0);
-        //objectsToRemove.forEach(id => this.removeObjectById(id));
-
-    }
-
-    updateObject(id:number, state:any){
-        this.gameObjects.get(id)?.updateFromRequest(state);
-    }
-
-
-    sendToGame(req: any){
-        Game.getInstance().getSender().sendRequest(req);
-    }
-
     Mstart(p:p5){
         this.start(p);
     }
@@ -169,10 +102,6 @@ export abstract class Scene {
 
     getnewLocalObjectId(): number {
         return this.LocalObjectIdCounter--;
-    }
-
-    getTypeRegistry(): TypeRegistry {
-        return this.typeRegistry;
     }
 
     Mend(){

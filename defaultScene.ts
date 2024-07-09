@@ -1,5 +1,5 @@
 
-import { Scene } from "$lib/GameEngine/Scene";
+import { Scene } from "./Scene";
 import type p5 from "p5";
 
 

@@ -1,23 +1,17 @@
-import { RequestSender } from '$lib/RequestSender';
-import { messageSubscriber } from '$lib/messageSubscriber';
 import type p5 from 'p5';
 import { Camera } from './Camera';
 import { SpatialHashmap } from './SpatialHashmap';
 import { Vector2 } from './Vector2';
 import { Scene } from './Scene';
 import { defaultScene } from './defaultScene';
-import { gameRequest } from '$lib/gameRequest';
-import { gameRequestFactory } from '$lib/gameRequestFactory';
 
-export class Game extends messageSubscriber{
+
+export class Game{
 
     static instance: Game;
-    protected sender: RequestSender;
     private camera: Camera;
     private collisionSystem: SpatialHashmap;
     private scene: Scene;
-
-    private RemoteRequestQueue: gameRequest[] = [];
 
     private mousePosition:Vector2 = new Vector2(0,0); 
 
@@ -31,9 +25,7 @@ export class Game extends messageSubscriber{
     }
 
     constructor(){
-        super();
         this.camera = new Camera();
-        this.sender = new RequestSender();
         this.collisionSystem = new SpatialHashmap(100);
         this.scene = new defaultScene(); 
     }
@@ -47,40 +39,7 @@ export class Game extends messageSubscriber{
         return this.scene;
     }
 
-    getSender(): RequestSender {
-        return this.sender;
-    }
-
-    onMessage(req: gameRequest): void {
-        this.RemoteRequestQueue.push(req);
-    }
-
-    handleRemoteRequests(){
-        for (var req of this.RemoteRequestQueue){
-            if (req.Type == "SpawnObject"){
-                var cls:any = this.scene.getTypeRegistry().getTypeClass(req.Metadata.objectData.Type)
-                this.scene.addObject((cls)!.fromSerialized(req.Metadata.objectData));
-            }else
-
-            if (req.Type == "DestroyObject"){
-                this.scene.removeObjectById(req.Metadata.objectData.id);
-            }else
-
-            if(req.Type == "FullState"){
-                this.scene.UpdateState(req.Metadata.objectData);
-            }else
-
-            if (req.Type == "UpdateObject"){
-                this.scene.updateObject(req.Metadata.objectData.id,req.Metadata.objectData);
-            }
-        }
-        this.RemoteRequestQueue = [];
-    }
-
     start(p:p5){
-        
-        this.sender.sendRequest(gameRequestFactory.getFullStateRequest());
-
     }
 
     Mstart(p:p5){
@@ -96,18 +55,13 @@ export class Game extends messageSubscriber{
         const now = Date.now();
         this.deltaTime = now - this.lastUpdateTime;
         this.lastUpdateTime = now; 
-    
-        this.handleRemoteRequests();
         this.mousePosition.setX(p.mouseX + this.camera.getTransform().getPosition().getX());
         this.mousePosition.setY(p.mouseY + this.camera.getTransform().getPosition().getY());
-        
         this.collisionSystem.getHashMap().clear();
         this.scene.Mupdate(p, this.deltaTime );
         this.collisionSystem.update();
     }
     
-
-
 
     getMousePosition():Vector2{
         return this.mousePosition;

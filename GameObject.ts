@@ -6,22 +6,16 @@ import { Game } from "./Game";
 import { Transform } from "./Transform";
 import { Vector2 } from "./Vector2";
 import type { drawComponent } from "./drawComponent";
-import { Serializable } from "./Serialized";
-import { SerializableGameObject } from "./SerializableGameObject";
 
-export class GameObject extends SerializableGameObject{
-    @Serializable
+
+export class GameObject{
+
     protected transform : Transform;
-
-    @Serializable
-    protected futurtransform : Transform;
     
-    @Serializable
     protected name: string;
-    @Serializable
+
     protected id: number;
 
-    @Serializable
     protected tag: string;
 
     protected localTransform:Transform;
@@ -36,11 +30,9 @@ export class GameObject extends SerializableGameObject{
     private cameraAttached: boolean = false;
 
     constructor() {
-        super();
         this.id = -1;
         this.transform = new Transform(0, 0, 0, 0);
         this.localTransform = new Transform(0, 0, 0, 0);
-        this.futurtransform = new Transform(0, 0, 0, 0);
 
         this.lastx = 0;
         this.lasty = 0;
@@ -51,14 +43,6 @@ export class GameObject extends SerializableGameObject{
         this.colliderComponents = [];
         this.children = [];
 
-    }
-
-    getFutureTransform(): Transform {
-        return this.futurtransform;
-    }
-
-    setFutureTransform(transform: Transform) {
-        this.futurtransform = transform;
     }
 
     getTag(): string {
@@ -115,11 +99,6 @@ export class GameObject extends SerializableGameObject{
         this.start();
     }
 
-    asyncMove(vec:Vector2) {
-        Game.getInstance().getScene().asyncMoveObject(this, vec.getX(),vec.getY());
-        this.lastx = vec.getX();
-        this.lasty = vec.getY();
-    }
 
     move(x: number, y: number) {
         this.getTransform().getPosition().setX(x);
