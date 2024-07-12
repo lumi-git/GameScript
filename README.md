@@ -8,6 +8,8 @@ Game library with phisics and graphics engine that helps you to create your own 
 
 ## How to use 
 
+an example of a server working with the game library can be foudn under the branch: rt-add-example-server
+
 Clone this repo in your project folder and import it in your javascript file.
 
 ### Game:
