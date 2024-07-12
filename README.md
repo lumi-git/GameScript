@@ -7,6 +7,7 @@ Game library with phisics and graphics engine that helps you to create your own 
 > This repo will be updated when i will have time to do it!
 
 ## How to use 
+an example is present at the branch rt-add-example-server
 
 Clone this repo in your project folder and import it in your javascript file.
 

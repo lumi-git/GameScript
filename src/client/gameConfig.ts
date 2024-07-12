@@ -2,8 +2,6 @@ import p5 from 'p5';
 import { Game } from './gamescript/Game';
 import { defaultScene } from './gamescript/defaultScene';
 
-
-
 export function run() {
     const sketch = (p:any) => {
         let game:Game = Game.getInstance();
