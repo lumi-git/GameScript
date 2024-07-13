@@ -1,18 +1,17 @@
 import p5 from 'p5';
 import { Game } from './gamescript/Game';
-import { defaultScene } from './gamescript/defaultScene';
+import { MyScene } from './myGame/MyScene';
 
 export function run() {
     const sketch = (p:any) => {
         let game:Game = Game.getInstance();
     
-        game.setScene(new defaultScene());
+        game.setScene(new MyScene());
         p.setup = () => {
             let canvas = p.createCanvas(p.windowWidth, p.windowHeight);
             canvas.parent('canvas-container');
 
             p.windowResized = () => {
-                var newValue = Math.min(p.windowWidth, p.windowHeight);
                 p.resizeCanvas(p.windowWidth, p.windowHeight);
             };
             game.Mstart(p); 

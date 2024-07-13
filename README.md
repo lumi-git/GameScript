@@ -6,10 +6,21 @@ Game library with phisics and graphics engine that helps you to create your own 
 
 > This repo will be updated when i will have time to do it!
 
-## How to use 
-an example is present at the branch rt-add-example-server
+## How to use the demo
+clone this repo locally
 
-Clone this repo in your project folder and import it in your javascript file.
+An example is present at the branch rt-add-example-server
+
+run it by:
+```
+npm install
+npm run build
+npm run start
+```
+it will run by default on port 3000
+
+## How to use it in your project
+Clone this repo in your project folder and import it in your javascript file using the main branch.
 
 ### Game:
 

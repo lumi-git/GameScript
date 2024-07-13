@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "webpack",
-    "serve": "node --loader ts-node/esm src/server/index.ts --trace-warnings",
+    "serve": "node --no-warnings --loader ts-node/esm src/server/index.ts",
     "start": "npm run serve"
   },
   "keywords": [],
