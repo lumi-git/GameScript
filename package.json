@@ -1,0 +1,24 @@
+{
+  "name": "@ronantmx/gamescript",
+  "version": "1.0.0",
+  "description": "Game library with phisics and graphics engine that helps you to create your own games in javascript very quickly.",
+  "main": "index.js",
+  "types": "dist/index.d.ts",
+  "dependencies": {
+    "@types/p5": "^1.7.6",
+    "p5": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "typescript": "^5.5.3"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "publishConfig": {
+  "access": "public"
+}
+}
