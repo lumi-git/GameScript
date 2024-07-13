@@ -9,6 +9,8 @@ import { Vector2 } from "../gamescript/Vector2";
 
 export class MyEnemy extends GameObject{
     spawnPosition:Vector2 = new Vector2(0,0);
+    gfx:DrawRectangleComponent;
+    tagComponent:DrawTextComponent;
     constructor(randomVector:Vector2) {
         super();
         this.spawnPosition = randomVector;
@@ -19,12 +21,13 @@ export class MyEnemy extends GameObject{
         console.log("Hello from new enemy GameObject");
         this.getTransform().setPosition(this.spawnPosition);
         this.getTransform().setScale(new Vector2(50,50));
-        this.addDrawComponent(new DrawRectangleComponent(this, "red"));
-        var tagComponent:DrawTextComponent = new DrawTextComponent(this);
-        tagComponent.setText("Grrrrr");
-        tagComponent.setSize(25);
-        tagComponent.setColor("red");
-        this.addDrawComponent( tagComponent)
+        this.gfx = new DrawRectangleComponent(this, "red");
+        this.addDrawComponent(this.gfx);
+        this.tagComponent = new DrawTextComponent(this);
+        this.tagComponent.setText("Grrrrr");
+        this.tagComponent.setSize(25);
+        this.tagComponent.setColor("red");
+        this.addDrawComponent( this.tagComponent)
         this.addColliderComponent(new ColliderComponent(this));
     }
 
@@ -33,10 +36,24 @@ export class MyEnemy extends GameObject{
         var player = Game.getInstance().getScene().getObjectsByTag("Player")[0];
         if(player){
             var direction = player.getTransform().getPosition().sub(this.getTransform().getPosition());
-            direction.normalize();
             direction.selfScalMul(0.01);
-
             this.getTransform().setPosition(this.getTransform().getPosition().add(direction));
         }
     }
+
+    onCollision(collider: ColliderComponent): void {
+        this.gfx.setColor("green")
+        this.tagComponent.setText("Grrrrr collided");
+        //if distance with the collider is more that the size of the object, then move away
+        var direction = this.getTransform().getPosition().sub(collider.getParent().getTransform().getPosition());
+        direction.selfNormalize();
+        // calculate how much they overlap
+        var overlap = this.getTransform().getPosition().sub(collider.getParent().getTransform().getPosition());
+        // move the enemy away by the overlap
+        direction.selfScalMul(overlap.length()/25);
+
+        this.getTransform().setPosition(this.getTransform().getPosition().add(direction));
+
+    }
+
 }

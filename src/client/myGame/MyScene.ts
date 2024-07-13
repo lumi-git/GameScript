@@ -5,6 +5,8 @@ import { MyEnemy } from "./MyEnemy";
 import { MyPlayer } from "./MyPlayer";
 import type p5 from "p5";
 import { terrain } from "./MyTerrain";
+import { Game } from "../gamescript/Game";
+import { MyWall } from "./MyWall";
 
 
 export class MyScene extends Scene {
@@ -15,9 +17,13 @@ export class MyScene extends Scene {
 
     start(p: p5) {
         console.log("Hello from default Scene");
-        this.addObject(new terrain(new Vector2(20000, 20000)));
-        this.addObject(new MyPlayer());
-
+        const ter:terrain = new terrain(new Vector2(20000, 20000))
+        this.addObject(ter);
+        this.addObject(new MyPlayer(ter));
+        p.mousePressed = () => {
+            const w:MyWall = new MyWall(new Vector2(Game.getInstance().getMousePosition().getX(),Game.getInstance().getMousePosition().getY()));
+            this.addObject(w);
+        }
     }
 
     update(p: p5, dt: number): void {

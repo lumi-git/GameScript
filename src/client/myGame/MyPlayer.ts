@@ -8,8 +8,10 @@ import { Vector2 } from "../gamescript/Vector2";
 export class MyPlayer extends GameObject{
     tagComponent:DrawTextComponent;
     enemyDefeated:number = 0;
-    constructor() {
+    terrain:GameObject;
+    constructor(terrain:GameObject) {
         super();
+        this.terrain = terrain;
         this.setTag("Player");
         this.attachCamera();
     }
@@ -28,7 +30,6 @@ export class MyPlayer extends GameObject{
         this.addDrawComponent( this.tagComponent)
 
         this.addColliderComponent(new ColliderComponent(this));
-
     }
 
     onCollision(collider: ColliderComponent): void {
