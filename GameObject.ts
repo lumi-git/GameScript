@@ -19,8 +19,6 @@ export class GameObject{
     protected tag: string;
 
     protected localTransform:Transform;
-    protected lastx : number;
-    protected lasty: number;
 
     protected components: Component[];
     protected drawComponents: drawComponent[];
@@ -33,9 +31,6 @@ export class GameObject{
         this.id = -1;
         this.transform = new Transform(0, 0, 0, 0);
         this.localTransform = new Transform(0, 0, 0, 0);
-
-        this.lastx = 0;
-        this.lasty = 0;
         this.tag = "Untagged";
         this.name = "object";
         this.components = [];
@@ -100,9 +95,8 @@ export class GameObject{
     }
 
 
-    move(x: number, y: number) {
-        this.getTransform().getPosition().setX(x);
-        this.getTransform().getPosition().setY(y);
+    move(vector: Vector2) {
+        this.getTransform().setPosition(vector);
     }
 
     setName(name: string) {
@@ -120,7 +114,7 @@ export class GameObject{
         this.components.forEach(component => component.update(p,dt));
         this.update(p,dt);
         if (this.cameraAttached) {
-            Game.getInstance().getCamera().getTransform().setPosition(this.getTransform().getPosition().sub(new Vector2(p.width/2,p.height/2).sub(this.getTransform().getScale().scalMul(0.5))));
+            Game.getInstance().getCamera().follow(this.getTransform(),true,true);
         }
     }
 

@@ -18,6 +18,6 @@ export class PlayerMovementMouseComponent extends Component {
         amountToMove.selfSub( new Vector2 (this.getParent().getTransform().getPosition().getX(), this.getParent().getTransform().getPosition().getY()));
         amountToMove.selfNormalize();
         amountToMove.selfScalMul(scaledSpeed);
-        this.getParent().asyncMove( this.getParent().getTransform().getPosition().add(amountToMove));
+        this.getParent().move( this.getParent().getTransform().getPosition().add(amountToMove));
     }
 }
