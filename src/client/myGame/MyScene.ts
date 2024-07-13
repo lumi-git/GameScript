@@ -21,15 +21,24 @@ export class MyScene extends Scene {
         this.addObject(ter);
         this.addObject(new MyPlayer(ter));
         p.mousePressed = () => {
-            const w:MyWall = new MyWall(new Vector2(Game.getInstance().getMousePosition().getX(),Game.getInstance().getMousePosition().getY()));
-            this.addObject(w);
+            if( p.mouseButton === p.RIGHT){
+                const w:MyWall = new MyWall(new Vector2(Game.getInstance().getMousePosition().getX(),Game.getInstance().getMousePosition().getY()));
+                w.getTransform().setScale(new Vector2(100,100));
+                this.addObject(w);
+            }
+            if (p.mouseButton === p.LEFT){
+                const randomVector:Vector2 = new Vector2(Game.getInstance().getMousePosition().getX(),Game.getInstance().getMousePosition().getY());
+                this.addObject(new MyEnemy(randomVector));
         }
+        
     }
+}
+
 
     update(p: p5, dt: number): void {
         //spawn a new MyEnemy object every 2 seconds
         this.time += dt;
-        if(this.time > 2000){
+        if(this.time > 2000 && false){
             this.time = 0;
             const randomVector:Vector2 = new Vector2(Math.random()*20000, Math.random()*20000);
             this.addObject(new MyEnemy(randomVector));

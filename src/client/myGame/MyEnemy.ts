@@ -3,6 +3,7 @@ import { DrawElipseComponent } from "../gamescript/Components/DrawElipseComponen
 import { DrawRectangleComponent } from "../gamescript/Components/DrawRectangleComponent";
 import { DrawTextComponent } from "../gamescript/Components/DrawTextComponent";
 import { PlayerMovementComponent } from "../gamescript/Components/PlayerMovementComponent";
+import { RigidBodyComponent } from "../gamescript/Components/RigidBodyComponent";
 import { Game } from "../gamescript/Game";
 import { GameObject } from "../gamescript/GameObject";
 import { Vector2 } from "../gamescript/Vector2";
@@ -20,7 +21,7 @@ export class MyEnemy extends GameObject{
     start() {
         console.log("Hello from new enemy GameObject");
         this.getTransform().setPosition(this.spawnPosition);
-        this.getTransform().setScale(new Vector2(50,50));
+        this.getTransform().setScale(new Vector2(100,100));
         this.gfx = new DrawRectangleComponent(this, "red");
         this.addDrawComponent(this.gfx);
         this.tagComponent = new DrawTextComponent(this);
@@ -28,7 +29,7 @@ export class MyEnemy extends GameObject{
         this.tagComponent.setSize(25);
         this.tagComponent.setColor("red");
         this.addDrawComponent( this.tagComponent)
-        this.addColliderComponent(new ColliderComponent(this));
+        this.addColliderComponent(new RigidBodyComponent(this));
     }
 
     update(p: import("p5"), dt: number): void {
@@ -42,18 +43,12 @@ export class MyEnemy extends GameObject{
     }
 
     onCollision(collider: ColliderComponent): void {
-        this.gfx.setColor("green")
+        // Change color and tag on collision
+        this.gfx.setColor("green");
         this.tagComponent.setText("Grrrrr collided");
-        //if distance with the collider is more that the size of the object, then move away
-        var direction = this.getTransform().getPosition().sub(collider.getParent().getTransform().getPosition());
-        direction.selfNormalize();
-        // calculate how much they overlap
-        var overlap = this.getTransform().getPosition().sub(collider.getParent().getTransform().getPosition());
-        // move the enemy away by the overlap
-        direction.selfScalMul(overlap.length()/25);
-
-        this.getTransform().setPosition(this.getTransform().getPosition().add(direction));
-
     }
-
+    
+    
+    
+    
 }

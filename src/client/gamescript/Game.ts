@@ -13,6 +13,8 @@ export class Game{
     private collisionSystem: SpatialHashmap;
     private scene: Scene;
 
+    private ScreenSize:Vector2 = new Vector2(0,0);
+
     private mousePosition:Vector2 = new Vector2(0,0); 
 
     keys: any = {};
@@ -29,6 +31,34 @@ export class Game{
         this.collisionSystem = new SpatialHashmap(100);
         this.scene = new defaultScene(); 
     }
+
+    setScreenSize(width: number, height: number){
+
+        this.ScreenSize.setX(width);
+        this.ScreenSize.setY(height);
+    }
+
+    getScreenSize():Vector2{
+        return this.ScreenSize;
+    }
+
+    setScreenWidth(width: number){
+        this.ScreenSize.setX(width);
+    }
+
+    setScreenHeight(height: number){
+        this.ScreenSize.setY(height);
+    }
+
+    getScreenWidth(){
+        return this.ScreenSize.getX();
+    }
+
+    getScreenHeight(){
+        return this.ScreenSize.getY();
+    }
+
+
 
     setScene(scene: any){
         this.scene = scene;
@@ -77,7 +107,7 @@ export class Game{
 
     draw(p:p5) {
         this.scene.Mdraw(p,this.camera);
-        //this.collisionSystem.draw(p);
+        this.collisionSystem.draw(p);
         p.textSize(32);
         p.fill("black");
         p.text("FPS: " + Math.round(1000/this.deltaTime), 500, 30);

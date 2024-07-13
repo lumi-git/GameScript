@@ -9,10 +9,12 @@ export function run() {
         game.setScene(new MyScene());
         p.setup = () => {
             let canvas = p.createCanvas(p.windowWidth, p.windowHeight);
+            game.setScreenSize(p.windowWidth, p.windowHeight);
             canvas.parent('canvas-container');
 
             p.windowResized = () => {
                 p.resizeCanvas(p.windowWidth, p.windowHeight);
+                game.setScreenSize(p.windowWidth, p.windowHeight);
             };
             game.Mstart(p); 
         };
